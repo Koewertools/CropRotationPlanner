@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<cropRotation>
+    <historyStateMap numChannels="6">
+        <state titleKey="ui_last_fruit"/>
+        <state titleKey="ui_penultimate_fruit"/>
+    </historyStateMap>
+    <fallowStateMap numChannels="4" maxFallowState="12"/>
+    <catchCropMap numChannels="4"/>
+    <settings
+        monoculturePenalty="-0.05"
+        breakPeriodsPenalty="-0.1"
+        foreCropsPenalties="-0.25 -0.2"
+        foreCropsVeryGoodBonuses="0.15 0.1"
+        foreCropsGoodBonuses="0.1 0.05"
+        fallowStateBonus="0.05"
+        veryGoodCatchCropBonus="0.15"
+        goodCatchCropBonus="0.1"
+        badCatchCropPenalty="-0.1"
+    />
+</cropRotation>

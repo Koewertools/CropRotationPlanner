@@ -1,5 +1,5 @@
-import cropsXml from '../../xmls/crops.xml?raw'
-import settingsXml from '../../xmls/cropRotation.xml?raw'
+import cropsXml from './assets/crops.xml?raw'
+import settingsXml from './assets/cropRotation.xml?raw'
 
 export const FALLOW_ID = 'FALLOW'
 export const AUTO_CATCH = 'AUTO'
