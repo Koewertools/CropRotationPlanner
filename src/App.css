@@ -650,8 +650,18 @@
 .result-limit { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:24px; font-size:14px; }
 .result-limit small { display:block; margin-top:4px; color:#77858f; font-size:12px; }
 .result-limit input { width:68px; height:38px; border:1px solid #cdd8dd; border-radius:4px; padding:5px 7px; color:#344651; font-size:14px; }
+.mobile-view-switcher { display: none; }
 
 @media(max-width:640px){
+  .app-shell { padding-bottom: 76px; }
+  .app-shell.mobile-results-active #planner,
+  .app-shell.mobile-results-active #methodology,
+  .app-shell:not(.mobile-results-active) #results,
+  .app-shell:not(.mobile-results-active) #methodology { display: none; }
+  .mobile-view-switcher { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.97); border-top: 1px solid #dce2e7; box-shadow: 0 -6px 18px rgba(30,45,54,.09); }
+  .mobile-view-switcher button { position: relative; display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; border-radius: 5px; background: transparent; color: #64737d; font-size: 12px; font-weight: 600; }
+  .mobile-view-switcher button.active { color: #21644e; background: #e9f3ee; }
+  .mobile-view-switcher button small { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; color: #fff; background: #21644e; font-size: 10px; }
   .topbar nav { font-size: 12px; }
   .mobile-label { font-size: 11px; }
   .sequence { font-size: 13px; }

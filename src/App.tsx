@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useState, useTransition } from 'react'
-import { ArrowRight, Check, ChevronDown, Info, RotateCcw, Search, Sprout } from 'lucide-react'
+import { ArrowRight, BarChart3, Check, ChevronDown, Info, RotateCcw, Search, Settings2, Sprout } from 'lucide-react'
 import './App.css'
 import { AUTO_CATCH, FALLOW_ID, NO_CATCH, REQUIRED_CATCH, displayName, model, optimizeRotations, type Category, type RotationResult } from './rotationModel'
 
@@ -74,6 +74,7 @@ function App() {
   const [limits, setLimits] = useState<Record<string, number>>(initialState.limits)
   const [search, setSearch] = useState('')
   const [onlySelected, setOnlySelected] = useState(false)
+  const [mobileView, setMobileView] = useState<'planner' | 'results'>('planner')
   const query = useDeferredValue(search).trim().toLocaleLowerCase('de')
   const [results, setResults] = useState<RotationResult[]>(() => optimizeRotations(initialState.fallow ? [...initialState.selected, FALLOW_ID] : initialState.selected, initialState.length, initialState.policies, { ...initialState.limits, [FALLOW_ID]: 1 }, initialState.resultLimit, initialState.allowedAfter))
   const [expanded, setExpanded] = useState<string | null>(results[0]?.id ?? null)
@@ -83,6 +84,10 @@ function App() {
   const visible = crops.filter(crop => crop.name.toLocaleLowerCase('de').includes(query) && (!onlySelected || selected.includes(crop.id)))
   const capacity = selected.reduce((sum, id) => sum + (limits[id] ?? 1), fallow ? 1 : 0)
   const change = (action: () => void) => { action(); setDirty(true) }
+  const switchMobileView = (view: 'planner' | 'results') => {
+    setMobileView(view)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ selected, length, resultLimit, fallow, policies, allowedAfter, limits } satisfies SavedPlannerState))
   }, [selected, length, resultLimit, fallow, policies, allowedAfter, limits])
@@ -99,7 +104,7 @@ function App() {
     })
   }
 
-  return <div className="app-shell">
+  return <div className={`app-shell${mobileView === 'results' ? ' mobile-results-active' : ''}`}>
     <header className="topbar">
       <a href="#planner" className="brand"><Sprout size={23} /><span>Fruchtfolgeplaner</span><small>FS25</small></a>
       <nav aria-label="Seitennavigation"><a href="#planner">Planung</a><a href="#results">Ergebnisse</a><a href="#methodology">Berechnungsgrundlage</a></nav>
@@ -175,6 +180,10 @@ function App() {
       <section id="methodology" className="method-section"><details><summary><Info size={17} /><h2>Berechnungsgrundlage</h2><ChevronDown size={17} /></summary><div className="method-content"><p>Die Bewertung verwendet die Pflanzen- und Ertragsparameter des FS25 Crop Rotation Mods. Jede Ernte berücksichtigt die letzten zwei Hauptkulturen, Anbaupausen, Monokultur, Brache und die tatsächlich mögliche Zwischenfrucht.</p><p>Die Fruchtfolge wird zyklisch bewertet: Die letzte Kultur ist die Vorfrucht der ersten. Eine gesperrte Zwischenfrucht nach der letzten Kultur gilt daher auch vor der ersten.</p><p>Die Ertragseffekte werden zum Basiswert von 100 % addiert. Bei großen Suchräumen verwendet die Berechnung eine begrenzte Suche; die Vorschläge sind dann keine Garantie für das globale Optimum.</p><p className="muted">Datenquelle: xmls/crops.xml und xmls/cropRotation.xml · Anbaupausen von 2–4 greifen wegen der zwei gespeicherten Vorfrüchte identisch.</p></div></details></section>
     </main>
     <footer><span>FS25 Crop Rotation · Fruchtfolgeplaner</span><span><Check size={13} /> Lokale Berechnung</span></footer>
+    <nav className="mobile-view-switcher" aria-label="Mobile Ansicht">
+      <button type="button" className={mobileView === 'planner' ? 'active' : ''} aria-current={mobileView === 'planner' ? 'page' : undefined} onClick={() => switchMobileView('planner')}><Settings2 size={19} /><span>Einstellungen</span></button>
+      <button type="button" className={mobileView === 'results' ? 'active' : ''} aria-current={mobileView === 'results' ? 'page' : undefined} onClick={() => switchMobileView('results')}><BarChart3 size={19} /><span>Ergebnisse</span><small>{results.length}</small></button>
+    </nav>
   </div>
 }
 export default App
